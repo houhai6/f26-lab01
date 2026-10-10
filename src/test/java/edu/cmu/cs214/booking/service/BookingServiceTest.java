@@ -58,4 +58,16 @@ class BookingServiceTest {
         svc.book(roomA, bob, new TimeInterval(660, 720));
         assertEquals(2, svc.listBookings(roomA).size());
     }
+    @Test
+    void listBookingsOnlyReturnsBookingsForTheRequestedRoom() {
+        BookingService svc = newService();
+        svc.book(roomA, alice, new TimeInterval(600, 660)); // A房10-11点
+        svc.book(roomB, bob, new TimeInterval(600, 660));   // B房10-11点
+
+        // A房应该只有1个预订，不是2个
+        assertEquals(1, svc.listBookings(roomA).size());
+        // B房也应该只有1个
+        assertEquals(1, svc.listBookings(roomB).size());
+    }
 }
+
